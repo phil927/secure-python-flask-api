@@ -1,5 +1,8 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, abort
+from argon2 import PasswordHasher
+from database import *
+import timeit
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -43,6 +46,35 @@ def api_id():
             results.append(row)
 
     return jsonify(results)
+
+
+@app.route("/api/v1/auth/register", methods=["POST"])
+def api_register():
+    # Calls on the DB method to register a user
+    if "username" in request.args and "password" in request.args:
+        username = request.args["username"]
+        password = request.args["password"]
+    else:
+        abort(400, description="Error: either username or password not provided")
+
+    if does_user_exist(username):
+        abort(400, description="Error: User already exists")
+    else:
+        password_hash = PasswordHasher(hash_len=32).hash(password)
+        print("Password Hash computed in User Registration: {0}".format(password_hash))
+        registration_success = register_user(username, password_hash)
+        if not registration_success:
+            abort(500)
+        else:
+            return "User Registered!"
+
+
+@app.route("/api/v1/upload", methods=["POST"])
+def upload_file():
+    uploaded_file = request.files["file"]
+    if uploaded_file.filename != "":
+        uploaded_file.save(uploaded_file.filename)
+    return "File Saved"
 
 
 app.run()
