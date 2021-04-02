@@ -1,0 +1,6 @@
+To set up a production WSGI server: https://towardsdatascience.com/deploying-flask-with-gunicorn-3-9eaacd0f6eea
+Application Server vs. Web Server
+Seems that an application server processes dynamic content, and a web server serves up static content. This can be done very quickly since the web server is a worker model.
+If you want authentication on the static files -> https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
+
+Great Read on setting up flask/nginx on EC2 -> https://medium.com/@varunchitale/a-simple-python-api-using-flask-with-nginx-setup-on-aws-ec2-4a380ceaf006

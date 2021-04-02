@@ -5,7 +5,7 @@ from database import *
 import timeit
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 # https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
 # Add weather data for our catalog
@@ -77,4 +77,4 @@ def upload_file():
     return "File Saved"
 
 
-app.run()
+app.run(host="0.0.0.0", port=5000)
