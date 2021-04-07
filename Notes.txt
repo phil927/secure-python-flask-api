@@ -4,3 +4,21 @@ Seems that an application server processes dynamic content, and a web server ser
 If you want authentication on the static files -> https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-subrequest-authentication/
 
 Great Read on setting up flask/nginx on EC2 -> https://medium.com/@varunchitale/a-simple-python-api-using-flask-with-nginx-setup-on-aws-ec2-4a380ceaf006
+
+gunicorn --workers 3 --bind 0.0.0.0:5000 wsgi:app
+Or, for nginx
+gunicorn --workers 2 --bind unix:flask-api.sock wsgi:app
+
+
+Nginx server config /etc/nginx/sites-available/flask-api
+server {
+        listen 80;
+        server_name philliprstephens.com www.philliprstephens.com;
+
+        location / {
+                include proxy_params;
+                proxy_pass http://unix:~/secure-python-flask-api/flask-api.sock;
+        }
+}
+
+sudo ln -s /etc/nginx/sites-available/flask-api /etc/nginx/sites-enabled

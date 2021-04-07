@@ -76,5 +76,5 @@ def upload_file():
         uploaded_file.save(uploaded_file.filename)
     return "File Saved"
 
-
-app.run(host="0.0.0.0", port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
